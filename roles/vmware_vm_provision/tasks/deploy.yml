@@ -1,14 +1,14 @@
-- name: Deploy VM from content library template
-  community.vmware.vmware_content_library_vm:
+- name: Deploy VM from content library OVF
+  vmware.vmware.deploy_content_library_ovf:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    datacenter: "{{ datacenter }}"
     library: "{{ content_library }}"
-    template: "{{ template_name }}"
+    item: "{{ template_name }}"
     name: "{{ vm_name }}"
-    folder: "{{ folder }}"
-    cluster: "{{ cluster }}"
-    datastore: "{{ datastore }}"
+    placement:
+      cluster: "{{ cluster }}"
+      folder: "{{ folder }}"
+      datastore: "{{ datastore }}"
     power_on: false
