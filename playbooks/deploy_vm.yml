@@ -1,1 +1,27 @@
-
+- name: Deploy and configure VMware VM
+  hosts: localhost
+  gather_facts: false
+  
+  roles:
+    - role: vmware_vm_provision
+  vars:
+    vcenter_hostname: "vcenter.local"
+    vcenter_username: "administrator@vsphere.local"
+    vcenter_password: "your-password"
+    datacenter: "DC1"
+    cluster: "Prod-Cluster"
+    folder: "ProjectX/Prod"
+    content_library: "StandardLibrary"
+    template_name: "rhel-9-5-template"
+    vm_name: "my-vm01"
+    vm_notes: "Provisioned by Ansible for MyVMs"
+    datastore: "datastore1"
+    network_name: "VM Network"
+    ip_address: "192.168.1.100"
+    netmask: "255.255.255.0"
+    gateway: "192.168.1.1"
+    tagging:
+      - category: "Environment"
+        tag: "Production"
+      - category: "Project"
+        tag: "MyVMs"
