@@ -1,0 +1,7 @@
+cpu: 2
+memory_mb: 4096
+disk_size_gb: 60
+dns_servers:
+  - 8.8.8.8
+  - 1.1.1.1
+tags: []
