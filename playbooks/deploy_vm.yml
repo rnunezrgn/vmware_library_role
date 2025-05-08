@@ -1,3 +1,4 @@
+---
 - name: Deploy and configure VMware VM
   hosts: localhost
   gather_facts: false
