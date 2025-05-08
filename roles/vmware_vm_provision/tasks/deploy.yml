@@ -1,0 +1,14 @@
+- name: Deploy VM from content library template
+  community.vmware.vmware_content_library_vm:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter: "{{ datacenter }}"
+    library: "{{ content_library }}"
+    template: "{{ template_name }}"
+    name: "{{ vm_name }}"
+    folder: "{{ folder }}"
+    cluster: "{{ cluster }}"
+    datastore: "{{ datastore }}"
+    power_on: false

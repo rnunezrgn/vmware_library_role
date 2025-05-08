@@ -1,0 +1,30 @@
+- name: Reconfigure VM hardware and network
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ datacenter }}"
+    name: "{{ vm_name }}"
+    state: present
+    hardware:
+      memory_mb: "{{ memory_mb }}"
+      num_cpus: "{{ cpu }}"
+    annotation: "{{ vm_notes }}"
+
+- name: Customize guest with static IP and hostname
+  community.vmware.vmware_guest_customization:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ datacenter }}"
+    name: "{{ vm_name }}"
+    customization:
+      hostname: "{{ vm_name }}"
+      dns_servers: "{{ dns_servers }}"
+      nic_setting_map:
+        - adapter:
+            ip: "{{ ip_address }}"
+            subnet_mask: "{{ netmask }}"
+            gateway: ["{{ gateway }}"]

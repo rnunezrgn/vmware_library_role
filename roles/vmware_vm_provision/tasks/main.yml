@@ -1,0 +1,4 @@
+---
+- include_tasks: deploy.yml
+- include_tasks: customize.yml
+- include_tasks: tag.yml
