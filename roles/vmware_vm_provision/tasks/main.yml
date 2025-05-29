@@ -1,0 +1,4 @@
+---
+- ansible.builtin.include_tasks: deploy.yml
+- ansible.builtin.include_tasks: customize.yml
+- ansible.builtin.include_tasks: tag.yml

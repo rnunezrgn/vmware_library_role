@@ -1,0 +1,9 @@
+---
+- name: Deploy and configure VMware VM
+  hosts: localhost
+  gather_facts: false
+  
+  roles:
+    - role: vmware_vm_provision
+  vars:
+    - ../envs/demo.yml
