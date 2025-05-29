@@ -1,4 +1,4 @@
-- name: Deploy VM from content library OVF
+- name: Deploy VM from content library OVF.
   vmware.vmware.deploy_content_library_ovf:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
