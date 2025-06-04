@@ -16,7 +16,7 @@
     vcenter_password: ''
     datacenter: 'SDDC-Datacenter'
     the_cluster: 'Cluster-1'
-    the_folder: 'Systems'
+    the_folder: 'Red'
     content_library: 'VM Deployment Library'
     template_name: 'rhel-9.6-40GB-template'
     the_vm_name: '{{ vm_hostname }}'
