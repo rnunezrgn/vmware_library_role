@@ -1,0 +1,102 @@
+---
+- name: Deploy and configure VMware VM
+  hosts: localhost
+  gather_facts: false
+ 
+  collections:
+    - vmware.vmware.deploy_content_library_ovf
+    - vmware.vmware_rest.vcenter_vm_info
+    - vmware.vmware_rest.vcenter_vm_guest_customization
+    - vmware.vmware_rest.vcenter_vm_power
+    - community.vmware.vmware_tag_manager
+  
+  vars:
+    vcenter_hostname: 'vcsnsx-vc.infra.demo.redhat.com'
+    vcenter_username: ''
+    vcenter_password: ''
+    datacenter: 'SDDC-Datacenter'
+    the_cluster: 'Cluster-1'
+    the_folder: 'Systems'
+    content_library: 'VM Deployment Library'
+    template_name: 'rhel-9.6-40GB-template'
+    the_vm_name: '{{ vm_hostname }}'
+    vm_notes: 'AAP Provisioning'
+    the_datastore: 'SDDC-Datastore'
+    network_name: 'mynetwork'
+    cpu: 1
+    memory_mb: 4096
+    disk_size_gb: 30
+    the_ip_address: '{{ vm_network_ip }}'
+    the_netmask: '{{ vm_subnet_mask }}'
+    the_gateway: '{{ vm_gateway }}'
+    dns_servers:
+      - 196.168.1.10
+      - 196.168.100.100
+    
+  tasks:
+ 
+    - name: Deploy VM from content library OVF
+      vmware.vmware.deploy_content_library_ovf:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: false
+        library_name: '{{ content_library }}'
+        library_item_name: 'rhel-9.6-30GB-template'
+        datacenter: 'SDDC-Datacenter'
+        vm_name: '{{ the_vm_name }}'
+        cluster: '{{ the_cluster }}'
+        folder: '{{ the_folder }}'
+        datastore: '{{ the_datastore }}'
+ 
+    - name: Gather vm info
+      vmware.vmware_rest.vcenter_vm_info:
+        vcenter_hostname: '{{ vcenter_hostname }}'
+        vcenter_username: '{{ vcenter_username }}'
+        vcenter_password: '{{ vcenter_password }}'
+        vcenter_validate_certs: false
+        filter_names:
+        - '{{ the_vm_name }}'
+      register: vm_info
+ 
+    - name: debug tasks
+      debug:
+        msg: 'The VM ID is {{ vm_network_ip }}'
+ 
+    - name: Set VM ID variables
+      set_fact:
+        vm_id: '{{ vm_info.value[0].vm }}'
+ 
+    - name: Customize the VM
+      vmware.vmware_rest.vcenter_vm_guest_customization:
+        vcenter_hostname: '{{ vcenter_hostname }}'
+        vcenter_username: '{{ vcenter_username }}'
+        vcenter_password: '{{ vcenter_password }}'
+        vcenter_validate_certs: false
+        vm: '{{ vm_id }}'
+        global_DNS_settings:
+          dns_suffix_list:
+            - mydomain.com
+          dns_servers:
+            - 196.168.1.10
+            - 196.168.100.100
+        interfaces:
+          - adapter:
+              ipv4:
+                type: STATIC
+                static:
+                  #ip_address: '{{ vm_network_ip }}'
+                  ip_address: '192.168.1.100'
+                  subnet_mask: '{{ vm_subnet_mask }}'
+              gateway: ['{{ vm_gateway }}']
+        configuration_spec:
+          linux_config:
+            domain: mydomain.com
+            hostname:
+              fixed_name: '{{ the_vm_name }}'
+              type: FIXED
+ 
+    - name: Power on the VM
+      vmware.vmware_rest.vcenter_vm_power:
+        state: start
+        vm: '{{ vm_id }}'
