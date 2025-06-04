@@ -85,7 +85,7 @@
               ipv4:
                 type: STATIC
                 ip_address: '192.168.1.100'
-                previx: '24'
+                prefix: '24'
                 gateways: '192.168.1.1'
         configuration_spec:
           linux_config:
