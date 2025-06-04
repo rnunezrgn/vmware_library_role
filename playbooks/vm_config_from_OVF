@@ -84,11 +84,9 @@
           - adapter:
               ipv4:
                 type: STATIC
-                static:
-                  #ip_address: '{{ vm_network_ip }}'
-                  ip_address: '192.168.1.100'
-                  subnet_mask: '{{ vm_subnet_mask }}'
-              gateway: ['{{ vm_gateway }}']
+                ip_address: '192.168.1.100'
+                previx: '24'
+                gateways: '192.168.1.1'
         configuration_spec:
           linux_config:
             domain: mydomain.com
